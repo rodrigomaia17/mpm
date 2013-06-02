@@ -12,7 +12,7 @@ namespace MPM.Dominio
         public string Nome { get; set; }
         public Modelo Modelo { get; set; }
         public int Kilometragem { get; set; }
-        public IEnumerable<ManutencaoRealizada> ManutencoesRealizadas { get; private set; }
+        public IList<ManutencaoRealizada> ManutencoesRealizadas { get; private set; }
 
         public Veiculo()
         {
@@ -25,8 +25,15 @@ namespace MPM.Dominio
 
             foreach (var manuRecomendada in Modelo.ManutencoesRecomendadas)
             {
-                if(!ManutencoesRealizadas.Any(m => m.Tipo.Equals(manuRecomendada.Tipo)))
+                var ultimaManutencao =
+                    ManutencoesRealizadas.OrderByDescending(p => p.Data)
+                                         .FirstOrDefault(realizada => realizada.Tipo == manuRecomendada.Tipo);
+
+                if(ultimaManutencao == null && Kilometragem > manuRecomendada.Intervalo)
                     retorno.Add(new ManutencaoPendente(manuRecomendada.Tipo, Kilometragem - manuRecomendada.Intervalo));
+                else if(ultimaManutencao != null && ((Kilometragem - ultimaManutencao.Kilometragem) > manuRecomendada.Intervalo))
+                    retorno.Add(new ManutencaoPendente(manuRecomendada.Tipo, Kilometragem - ultimaManutencao.Kilometragem));
+
             }
 
             return retorno;

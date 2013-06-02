@@ -10,5 +10,6 @@ namespace MPM.Dominio
     {
         public Guid Id { get; set; }
         public string Nome { get; set; }
+        public IList<Veiculo> Veiculos { get; set; } 
     }
 }
