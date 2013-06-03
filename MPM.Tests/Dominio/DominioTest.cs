@@ -30,7 +30,7 @@ namespace MPM.Tests.Dominio
         {
             var modelo = EntidadesUtil.NovoModelo();
 
-            var veiculo = new Veiculo() {Modelo = modelo, Kilometragem = 30000};
+            var veiculo = new Veiculo() { Modelo = modelo, Kilometragem = 30000 };
             veiculo.ManutencoesRealizadas.Add(new ManutencaoRealizada()
                 {
                     Data = DateTime.Today,
