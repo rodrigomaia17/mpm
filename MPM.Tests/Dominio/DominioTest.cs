@@ -15,11 +15,11 @@ namespace MPM.Tests.Dominio
 
             var modelo = EntidadesUtil.NovoModelo();
 
-            var veiculo = new Veiculo() { Modelo = modelo, Kilometragem = 30000 };
+            var veiculo = new Veiculo { Modelo = modelo, Kilometragem = 30000 };
 
-            var pendencias = veiculo.VerificaManutencoesPendentes().ToList();
+            var pendencias = veiculo.ManutencoesPendentes.ToList();
 
-            Assert.IsTrue(pendencias.Count == 1);
+            Assert.IsTrue(pendencias.Count() == 1);
             Assert.IsTrue(pendencias.Single().Tipo == TipoManutencao.TrocaDeOleo);
             Assert.IsTrue(pendencias.Single().KilometrosDeAtraso == 20000);
 
@@ -30,17 +30,17 @@ namespace MPM.Tests.Dominio
         {
             var modelo = EntidadesUtil.NovoModelo();
 
-            var veiculo = new Veiculo() { Modelo = modelo, Kilometragem = 30000 };
-            veiculo.ManutencoesRealizadas.Add(new ManutencaoRealizada()
+            var veiculo = new Veiculo { Modelo = modelo, Kilometragem = 30000 };
+            veiculo.AdicionarManutencaoRealizada(new ManutencaoRealizada
                 {
                     Data = DateTime.Today,
                     Kilometragem = 15000,
                     Tipo = TipoManutencao.TrocaDeOleo
                 });
 
-            var pendencias = veiculo.VerificaManutencoesPendentes().ToList();
+            var pendencias = veiculo.ManutencoesPendentes.ToList();
 
-            Assert.IsTrue(pendencias.Count == 1);
+            Assert.IsTrue(pendencias.Count() == 1);
             Assert.IsTrue(pendencias.Single().Tipo == TipoManutencao.TrocaDeOleo);
             Assert.IsTrue(pendencias.Single().KilometrosDeAtraso == 15000);
         }
@@ -50,12 +50,12 @@ namespace MPM.Tests.Dominio
     {
         public static Modelo NovoModelo()
         {
-            var modelo = new Modelo()
+            var modelo = new Modelo
             {
                 Nome = "FordKa",
-                ManutencoesRecomendadas = new List<ManutencaoRecomendada>()
+                ManutencoesRecomendadas = new List<ManutencaoRecomendada>
                         {
-                            new ManutencaoRecomendada() { Intervalo = 10000, Tipo = TipoManutencao.TrocaDeOleo }
+                            new ManutencaoRecomendada { Intervalo = 10000, Tipo = TipoManutencao.TrocaDeOleo }
                         }
             };
 
