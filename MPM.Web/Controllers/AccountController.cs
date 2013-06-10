@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
+using MPM.Infra.Factory;
+using MPM.Infra.Interfaces;
 using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using MPM.Web.Filters;
@@ -17,6 +19,12 @@ namespace MPM.Web.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
+        private IUsuarioRepository _usuarioRepository;
+          
+         public AccountController(IRepositoryFactory factory)
+         {
+             _usuarioRepository = factory.GetUsuarioRepository();
+         }
         //
         // GET: /Account/Login
 
