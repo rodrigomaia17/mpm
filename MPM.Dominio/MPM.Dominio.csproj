@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IPossuiGuidId.cs" />
     <Compile Include="ManutencaoPendente.cs" />
     <Compile Include="ManutencaoRealizada.cs" />
     <Compile Include="ManutencaoRecomendada.cs" />
