@@ -22,9 +22,9 @@ namespace MPM.Web
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            //OAuthWebSecurity.RegisterFacebookClient(
-            //    appId: "",
-            //    appSecret: "");
+            OAuthWebSecurity.RegisterFacebookClient(
+                appId: "258700497513866",
+                appSecret: "c50d1cb8c493fad5744f1903d504c212");
 
             //OAuthWebSecurity.RegisterGoogleClient();
         }

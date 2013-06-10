@@ -6,20 +6,20 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using DotNetOpenAuth.AspNet;
+using MPM.Dominio;
 using MPM.Infra.Factory;
 using MPM.Infra.Interfaces;
 using Microsoft.Web.WebPages.OAuth;
+using Newtonsoft.Json;
 using WebMatrix.WebData;
-using MPM.Web.Filters;
 using MPM.Web.Models;
 
 namespace MPM.Web.Controllers
 {
     [Authorize]
-    [InitializeSimpleMembership]
     public class AccountController : Controller
     {
-        private IUsuarioRepository _usuarioRepository;
+        private readonly IUsuarioRepository _usuarioRepository;
           
          public AccountController(IRepositoryFactory factory)
          {
@@ -231,25 +231,11 @@ namespace MPM.Web.Controllers
                 return RedirectToAction("ExternalLoginFailure");
             }
 
-            if (OAuthWebSecurity.Login(result.Provider, result.ProviderUserId, createPersistentCookie: false))
-            {
-                return RedirectToLocal(returnUrl);
-            }
+            var usuario = new Usuario {Email = result.UserName};
 
-            if (User.Identity.IsAuthenticated)
-            {
-                // If the current user is logged in add the new account
-                OAuthWebSecurity.CreateOrUpdateAccount(result.Provider, result.ProviderUserId, User.Identity.Name);
-                return RedirectToLocal(returnUrl);
-            }
-            else
-            {
-                // User is new, ask for their desired membership name
-                string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
-                ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
-                ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
-            }
+            AttachAuthorizationTicket(usuario);
+
+            return RedirectToAction("Index", "Home");
         }
 
         //
@@ -271,15 +257,13 @@ namespace MPM.Web.Controllers
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
-                using (UsersContext db = new UsersContext())
-                {
-                    UserProfile user = db.UserProfiles.FirstOrDefault(u => u.UserName.ToLower() == model.UserName.ToLower());
+                
+                    var  user = _usuarioRepository.GetFiltered(u => u.Username.ToLower() == model.UserName.ToLower()).FirstOrDefault();
                     // Check if user already exists
                     if (user == null)
                     {
                         // Insert name into the profile table
-                        db.UserProfiles.Add(new UserProfile { UserName = model.UserName });
-                        db.SaveChanges();
+                        _usuarioRepository.Insert(new Usuario {Username = model.UserName});
 
                         OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
                         OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
@@ -290,7 +274,7 @@ namespace MPM.Web.Controllers
                     {
                         ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
                     }
-                }
+                
             }
 
             ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(provider).DisplayName;
@@ -337,6 +321,29 @@ namespace MPM.Web.Controllers
         }
 
         #region Helpers
+
+        private void AttachAuthorizationTicket(Usuario user)
+        {
+            var userData = JsonConvert.SerializeObject(user, Formatting.None);
+
+            var authenticationTicket =
+                new FormsAuthenticationTicket(1,
+                                              user.Email,
+                                              DateTime.UtcNow,
+                                              DateTime.UtcNow.AddDays(1),
+                                              true,
+                                              userData
+                    );
+
+            var encryptedTicket = FormsAuthentication.Encrypt(authenticationTicket);
+
+            Response.Cookies.Add(
+                new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket)
+                {
+                    Expires = authenticationTicket.Expiration
+                });
+        }
+
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

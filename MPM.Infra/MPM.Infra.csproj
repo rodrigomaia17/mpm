@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Factory\IRepositoryFactory.cs" />
     <Compile Include="Interfaces\IUsuarioRepository.cs" />
+    <Compile Include="Local\LocalRepository.cs" />
     <Compile Include="Local\LocalRepositoryFactory.cs" />
     <Compile Include="Local\LocalUsuarioRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
