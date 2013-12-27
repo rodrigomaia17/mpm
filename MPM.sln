@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPM.Dominio", "MPM.Dominio\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPM.Infra", "MPM.Infra\MPM.Infra.csproj", "{CE08AC83-3954-4A8E-A9C5-B235A807697D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPM.Web", "MPM.Web\MPM.Web.csproj", "{725C7FA8-1BA3-43CB-99DA-28093BCF24E3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +25,6 @@ Global
 		{CE08AC83-3954-4A8E-A9C5-B235A807697D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE08AC83-3954-4A8E-A9C5-B235A807697D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE08AC83-3954-4A8E-A9C5-B235A807697D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{725C7FA8-1BA3-43CB-99DA-28093BCF24E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{725C7FA8-1BA3-43CB-99DA-28093BCF24E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{725C7FA8-1BA3-43CB-99DA-28093BCF24E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{725C7FA8-1BA3-43CB-99DA-28093BCF24E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
