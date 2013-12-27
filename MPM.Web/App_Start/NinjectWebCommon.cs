@@ -1,6 +1,3 @@
-using MPM.Infra.Factory;
-using MPM.Infra.Local;
-
 [assembly: WebActivator.PreApplicationStartMethod(typeof(MPM.Web.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(MPM.Web.App_Start.NinjectWebCommon), "Stop")]
 
@@ -56,12 +53,6 @@ namespace MPM.Web.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-
-#if DEBUG
-            kernel.Bind<IRepositoryFactory>().To<LocalRepositoryFactory>().InSingletonScope();
-#else
-            kernel.Bind<IRepositoryFactory>().To<LocalRepositoryFactory>().InSingletonScope();
-#endif
         }        
     }
 }
